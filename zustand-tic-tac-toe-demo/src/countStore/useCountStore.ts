@@ -1,4 +1,5 @@
-import { useRef, useSyncExternalStore } from "react";
+import { useRef } from "react";
+import useSyncExternalStore from "../hooks/useSyncExternalStore";
 import createCountStore from "./createCountStore";
 
 export default function useCountStore() {
