@@ -1,26 +1,24 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <title>SSE Demo</title>
+    <title>SSE Raw Demo</title>
   </head>
   <body>
-    <h1>SSE Messages:</h1>
-    <div id="output"></div>
+    <h1>SSE Events:</h1>
+    <div id="log"></div>
 
     <script>
-      const output = document.getElementById("output");
-      const eventSource = new EventSource("http://localhost:3010/sse");
+      const log = document.getElementById("log");
+      const es = new EventSource("http://localhost:3010/sse");
 
-      eventSource.onmessage = function (event) {
-        const message = document.createElement("p");
-        message.textContent = event.data;
-        output.appendChild(message);
+      es.onmessage = function (event) {
+        const div = document.createElement("div");
+        div.textContent = `ID: ${event.lastEventId}, Data: ${event.data}`;
+        log.appendChild(div);
       };
 
-      eventSource.onerror = function () {
-        console.log("Connection error or closed.");
+      es.onerror = function (err) {
+        console.error("SSE error", err);
       };
     </script>
   </body>
