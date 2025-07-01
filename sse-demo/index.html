@@ -1,0 +1,27 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SSE Demo</title>
+  </head>
+  <body>
+    <h1>SSE Messages:</h1>
+    <div id="output"></div>
+
+    <script>
+      const output = document.getElementById("output");
+      const eventSource = new EventSource("http://localhost:3010/sse");
+
+      eventSource.onmessage = function (event) {
+        const message = document.createElement("p");
+        message.textContent = event.data;
+        output.appendChild(message);
+      };
+
+      eventSource.onerror = function () {
+        console.log("Connection error or closed.");
+      };
+    </script>
+  </body>
+</html>
