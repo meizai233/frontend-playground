@@ -1,24 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>SSE Raw Demo</title>
+    <meta charset="UTF-8" />
+    <title>SSE Demo</title>
   </head>
   <body>
-    <h1>SSE Events:</h1>
-    <div id="log"></div>
+    <h1>🟢 Server-Sent Events</h1>
+    <ul id="events"></ul>
 
     <script>
-      const log = document.getElementById("log");
-      const es = new EventSource("http://localhost:3010/sse");
+      const eventList = document.getElementById("events");
+      const eventSource = new EventSource("/events");
 
-      es.onmessage = function (event) {
-        const div = document.createElement("div");
-        div.textContent = `ID: ${event.lastEventId}, Data: ${event.data}`;
-        log.appendChild(div);
+      eventSource.onopen = () => {
+        console.log("✅ Connected to SSE");
       };
 
-      es.onerror = function (err) {
-        console.error("SSE error", err);
+      eventSource.onmessage = (event) => {
+        const li = document.createElement("li");
+        li.textContent = `Default message: ${event.data}`;
+        eventList.appendChild(li);
+      };
+
+      eventSource.addEventListener("tick", (event) => {
+        const li = document.createElement("li");
+        li.textContent = `[tick] ${event.data}`;
+        eventList.appendChild(li);
+      });
+
+      eventSource.addEventListener("hello", (event) => {
+        const li = document.createElement("li");
+        li.style.color = "green";
+        li.textContent = `[hello] ${event.data}`;
+        eventList.appendChild(li);
+      });
+
+      eventSource.onerror = (err) => {
+        console.warn("⚠️ SSE error or disconnected", err);
       };
     </script>
   </body>
